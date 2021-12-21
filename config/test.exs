@@ -20,6 +20,12 @@ config :bank_api, BankAPIWeb.Endpoint,
   secret_key_base: "B68Su01rFOVgcfMuAt9g05MAjJr0aWOsmp/i4okpV8w/a1TYpaO2QcXvK24bg8sq",
   server: false
 
+config :commanded,
+  event_store_adapter: Commanded.EventStore.Adapters.InMemory
+
+config :commanded, Commanded.EventStore.Adapters.InMemory,
+  serializer: Commanded.Serialization.JsonSerializer
+
 # In test we don't send emails.
 config :bank_api, BankAPI.Mailer, adapter: Swoosh.Adapters.Test
 
@@ -28,3 +34,9 @@ config :logger, level: :warn
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :commanded,
+  event_store_adapter: Commanded.EventStore.Adapters.InMemory
+
+config :commanded, Commanded.EventStore.Adapters.InMemory,
+  serializer: Commanded.Serialization.JsonSerializer
