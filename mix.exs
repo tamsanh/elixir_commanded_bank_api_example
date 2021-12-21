@@ -51,7 +51,8 @@ defmodule BankAPI.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:commanded, "~> 1.3"},
       {:eventstore, "~> 1.3"},
-      {:commanded_eventstore_adapter, "~> 1.2"}
+      {:commanded_eventstore_adapter, "~> 1.2"},
+      {:typed_struct, "~> 0.2.1"}
     ]
   end
 
