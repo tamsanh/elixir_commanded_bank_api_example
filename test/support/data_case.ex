@@ -27,11 +27,11 @@ defmodule BankAPI.DataCase do
     end
   end
 
-  setup tags do
-    pid = Ecto.Adapters.SQL.Sandbox.start_owner!(BankAPI.Repo, shared: not tags[:async])
-    on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
-    :ok
-  end
+  # setup tags do
+  # pid = Ecto.Adapters.SQL.Sandbox.start_owner!(BankAPI.Repo, shared: not tags[:async])
+  # on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
+  # :ok
+  # end
 
   @doc """
   A helper that transforms changeset errors into a map of messages.
