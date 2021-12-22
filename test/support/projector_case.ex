@@ -14,6 +14,7 @@ defmodule BankAPI.Test.ProjectorCase do
   end
 
   setup _tags do
+    {:ok, _apps} = Application.ensure_all_started(:bank_api)
     :ok = BankAPI.Test.ProjectorUtils.truncate_database()
     :ok
   end
