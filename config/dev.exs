@@ -73,6 +73,13 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
+config :bank_api, BankAPI.CommandedApplication,
+  event_store: [
+    adapter: Commanded.EventStore.Adapters.EventStore,
+    serializer: Commanded.Serialization.JsonSerializer,
+    event_store: BankAPI.EventStore
+  ]
+
 config :bank_api, BankAPI.EventStore,
   serializer: EventStore.JsonbSerializer,
   column_data_type: "jsonb",

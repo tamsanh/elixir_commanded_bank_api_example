@@ -28,13 +28,8 @@ config :logger, level: :warn
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
 
-config :bank_api, BankAPI.EventStore,
-  serializer: EventStore.JsonbSerializer,
-  column_data_type: "jsonb",
-  types: EventStore.PostgresTypes,
-  username: "postgres",
-  password: "postgres",
-  database: "bank_api_eventstore_test",
-  hostname: "localhost",
-  pool_size: 10,
-  pool_overflow: 5
+config :bank_api, BankAPI.CommandedApplication,
+  event_store: [
+    adapter: Commanded.EventStore.Adapters.InMemory,
+    serializer: Commanded.Serialization.JsonSerializer
+  ]

@@ -23,7 +23,7 @@ defmodule BankAPI.Accounts do
   import Ecto.Query, warn: false
 
   alias BankAPI.Repo
-  alias BankAPI.Router
+  alias BankAPI.CommandedApplication
   alias BankAPI.Accounts.Commands.OpenAccount
   alias BankAPI.Accounts.Projections.Account
 
@@ -45,7 +45,7 @@ defmodule BankAPI.Accounts do
         initial_balance: initial_balance,
         account_uuid: account_uuid
       }
-      |> Router.dispatch()
+      |> CommandedApplication.dispatch()
 
     case dispatch_result do
       :ok ->
