@@ -12,11 +12,12 @@ defmodule BankAPI.Accounts.Aggregates.Account do
   typedstruct do
     field :uuid, String.t()
     field :current_balance, integer()
+    field :closed?, boolean(), default: false
   end
 
   alias __MODULE__
-  alias BankAPI.Accounts.Commands.OpenAccount
-  alias BankAPI.Accounts.Events.AccountOpened
+  alias BankAPI.Accounts.Commands.{OpenAccount, CloseAccount}
+  alias BankAPI.Accounts.Events.{AccountOpened, AccountClosed}
 
   def execute(
         %Account{uuid: nil},
@@ -46,6 +47,24 @@ defmodule BankAPI.Accounts.Aggregates.Account do
     {:error, :account_already_opened}
   end
 
+  def execute(%Account{uuid: account_uuid, closed?: true}, %CloseAccount{
+        account_uuid: account_uuid
+      }) do
+    {:error, :account_already_closed}
+  end
+
+  def execute(%Account{uuid: account_uuid, closed?: false}, %CloseAccount{
+        account_uuid: account_uuid
+      }) do
+    %AccountClosed{
+      account_uuid: account_uuid
+    }
+  end
+
+  def execute(%Account{}, %CloseAccount{}) do
+    {:error, :not_found}
+  end
+
   def apply(
         %Account{} = account,
         %AccountOpened{
@@ -57,6 +76,18 @@ defmodule BankAPI.Accounts.Aggregates.Account do
       account
       | uuid: account_uuid,
         current_balance: initial_balance
+    }
+  end
+
+  def apply(
+        %Account{uuid: account_uuid} = account,
+        %AccountClosed{
+          account_uuid: account_uuid
+        }
+      ) do
+    %Account{
+      account
+      | closed?: true
     }
   end
 end

@@ -24,10 +24,17 @@ defmodule BankAPI.Accounts do
 
   alias BankAPI.Repo
   alias BankAPI.CommandedApplication
-  alias BankAPI.Accounts.Commands.OpenAccount
+  alias BankAPI.Accounts.Commands.{OpenAccount, CloseAccount}
   alias BankAPI.Accounts.Projections.Account
 
   def get_account(uuid), do: Repo.get!(Account, uuid)
+
+  def close_account(uuid) do
+    %CloseAccount{
+      account_uuid: uuid
+    }
+    |> CommandedApplication.dispatch()
+  end
 
   @doc """
   Using pattern-matching, we immediately discard calls
@@ -53,7 +60,8 @@ defmodule BankAPI.Accounts do
           :ok,
           %Account{
             uuid: account_uuid,
-            current_balance: initial_balance
+            current_balance: initial_balance,
+            status: Account.status().open
           }
         }
 

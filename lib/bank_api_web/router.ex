@@ -23,7 +23,7 @@ defmodule BankAPIWeb.Router do
   scope "/api", BankAPIWeb do
     pipe_through :api
 
-    resources "/accounts", AccountController, only: [:create]
+    resources "/accounts", AccountController, only: [:create, :delete, :show]
   end
 
   # Other scopes may use custom stacks.
