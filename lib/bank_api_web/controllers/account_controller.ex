@@ -28,4 +28,20 @@ defmodule BankAPIWeb.AccountController do
       |> render("show.json", account: account)
     end
   end
+
+  def deposit(conn, %{"id" => account_id, "deposit_amount" => amount}) do
+    with {:ok, %Account{} = account} <- Accounts.deposit(account_id, amount) do
+      conn
+      |> put_status(:ok)
+      |> render("show.json", account: account)
+    end
+  end
+
+  def withdraw(conn, %{"id" => account_id, "withdrawal_amount" => amount}) do
+    with {:ok, %Account{} = account} <- Accounts.withdraw(account_id, amount) do
+      conn
+      |> put_status(:ok)
+      |> render("show.json", account: account)
+    end
+  end
 end

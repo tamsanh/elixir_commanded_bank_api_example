@@ -24,6 +24,9 @@ defmodule BankAPIWeb.Router do
     pipe_through :api
 
     resources "/accounts", AccountController, only: [:create, :delete, :show]
+
+    post "/accounts/:id/deposit", AccountController, :deposit
+    post "/accounts/:id/withdraw", AccountController, :withdraw
   end
 
   # Other scopes may use custom stacks.

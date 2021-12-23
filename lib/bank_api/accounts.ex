@@ -24,7 +24,14 @@ defmodule BankAPI.Accounts do
 
   alias BankAPI.Repo
   alias BankAPI.CommandedApplication
-  alias BankAPI.Accounts.Commands.{OpenAccount, CloseAccount}
+
+  alias BankAPI.Accounts.Commands.{
+    OpenAccount,
+    CloseAccount,
+    DepositIntoAccount,
+    WithdrawFromAccount
+  }
+
   alias BankAPI.Accounts.Projections.Account
 
   def get_account(uuid), do: Repo.get!(Account, uuid)
@@ -71,4 +78,55 @@ defmodule BankAPI.Accounts do
   end
 
   def open_account(_params), do: {:error, :bad_command}
+
+  @doc """
+  We probably want strong consistency here, since
+  these operations are important to an account.
+  Thus, we dispatch these new commands with a strong
+  guarantee which makes Commanded wait until all effects
+  from the dispatch are resolved. Using
+  consistency: [BankAPI.Accounts.Projectors.DepositsAndWithdrawals]
+  is also an option here, to specify on which event
+  handler you’re waiting for. This cuts down on latency by
+  involving fewer handlers at the cost of some increased coupling.
+  """
+  def deposit(id, amount) do
+    dispatch_result =
+      %DepositIntoAccount{
+        account_uuid: id,
+        deposit_amount: amount
+      }
+      |> CommandedApplication.dispatch(consistency: :strong)
+
+    case dispatch_result do
+      :ok ->
+        {
+          :ok,
+          Repo.get!(Account, id)
+        }
+
+      reply ->
+        reply
+    end
+  end
+
+  def withdraw(id, amount) do
+    dispatch_result =
+      %WithdrawFromAccount{
+        account_uuid: id,
+        withdraw_amount: amount
+      }
+      |> CommandedApplication.dispatch(consistency: :strong)
+
+    case dispatch_result do
+      :ok ->
+        {
+          :ok,
+          Repo.get!(Account, id)
+        }
+
+      reply ->
+        reply
+    end
+  end
 end
