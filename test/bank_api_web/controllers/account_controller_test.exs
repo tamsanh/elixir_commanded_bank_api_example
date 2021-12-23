@@ -26,7 +26,7 @@ defmodule BankAPIWeb.AccountControllerTest do
 
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, Routes.account_path(conn, :create), account: @invalid_attrs)
-      assert json_response(conn, 422) == "Unprocessable Entity"
+      assert json_response(conn, 422)["errors"]["message"] == "Command validation error"
     end
   end
 end
