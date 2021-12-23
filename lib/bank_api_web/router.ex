@@ -27,6 +27,7 @@ defmodule BankAPIWeb.Router do
 
     post "/accounts/:id/deposit", AccountController, :deposit
     post "/accounts/:id/withdraw", AccountController, :withdraw
+    post "/accounts/:id/transfer", AccountController, :transfer
   end
 
   # Other scopes may use custom stacks.
