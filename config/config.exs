@@ -48,11 +48,6 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :commanded,
-  event_store_adapter: Commanded.EventStore.Adapters.EventStore
-
-config :bank_api, event_stores: [BankAPI.EventStore]
-
 config :commanded_ecto_projections,
   repo: BankAPI.Repo
 
