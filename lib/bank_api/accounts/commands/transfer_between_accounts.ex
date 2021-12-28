@@ -3,7 +3,6 @@ defmodule BankAPI.Accounts.Commands.TransferBetweenAccounts do
   import Norm
 
   alias BankAPI.Repo
-  alias BankAPI.Accounts
   alias BankAPI.Validation.Utils
   alias BankAPI.Accounts.Projections.Account
 
